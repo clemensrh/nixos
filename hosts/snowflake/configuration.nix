@@ -78,5 +78,10 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  security.sudo.extraConfig = ''
+    Defaults pwfeedback # password input feedback - makes typed password visible as asterisks
+    Defaults timestamp_timeout=120 # only ask for password every 2h
+  '';
+
   system.stateVersion = "25.05";
 }
