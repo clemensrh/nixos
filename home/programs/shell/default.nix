@@ -1,8 +1,7 @@
 { ... }:
-
 {
   imports = [
-    ./git.nix
-    ./shell
+    ./omp.nix
+    ./zsh.nix
   ];
 }

@@ -61,9 +61,11 @@
       "wheel"
       "networkmanager"
     ];
+    shell = pkgs.zsh;
   };
 
-  # System packages
+  programs.zsh.enable = true;
+
   environment.systemPackages = with pkgs; [
     wget
     neovim
