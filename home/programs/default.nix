@@ -2,7 +2,9 @@
 
 {
   imports = [
-    ./git.nix
-    ./shell
+    ./git
+    ./blender
+    ./zed
+    ./rofi
   ];
 }

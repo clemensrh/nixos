@@ -1,8 +1,12 @@
 {
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    comfyui-nix.url = "github:utensils/comfyui-nix";
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
-    vicinae.url = "github:vicinaehq/vicinae";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -15,21 +19,16 @@
       home-manager,
       ...
     }@inputs:
-    {
-      nixosConfigurations.snowflake = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./hosts/snowflake/configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.clemens = import ./home/default.nix;
-              extraSpecialArgs = { inherit inputs; };
-            };
-          }
-        ];
+    let
+      customPkgs = import ./pkgs;
+      customOverlay = final: prev: customPkgs prev;
+
+      hosts = import ./hosts {
+        inherit nixpkgs home-manager inputs;
+        pkgsOverlay = customOverlay;
       };
+    in
+    {
+      nixosConfigurations = hosts;
     };
 }
